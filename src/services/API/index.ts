@@ -1,4 +1,5 @@
 import axios, { InternalAxiosRequestConfig } from "axios";
+import { router } from "expo-router";
 import { SECURE_STORE_KEYS } from "../store/secure-keys-enum";
 import { SecureStorage } from "../store/secure-storage";
 import { AppRoutes } from "./routes-enum";
@@ -77,6 +78,11 @@ API.interceptors.response.use(
         console.log("[Refresh Token]: ", error);
         return Promise.reject(error);
       }
+    }
+
+    if (error.response?.status === 403) {
+      router.replace("/(auth)/login")
+      return Promise.reject(error);
     }
 
     return Promise.reject(error);

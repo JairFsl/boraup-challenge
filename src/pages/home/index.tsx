@@ -1,4 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
+import { format } from "date-fns";
+import { router } from "expo-router";
 import { Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -22,6 +24,11 @@ export default function HomePage() {
     queryFn: HomeRequest,
     refetchInterval: 5000
   })
+
+  const handleLogout = () => {
+    logout()
+    router.replace("/(auth)/login")
+  }
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -51,7 +58,7 @@ export default function HomePage() {
               />
               <BasicInput
                 label="Data de Nascimento:"
-                value={data.birthday || ""}
+                value={format(data.birthday || "", "dd/MM/yyyy")}
                 editable={false}
                 containerStyle={{ flex: 1 }}
               />
@@ -76,7 +83,7 @@ export default function HomePage() {
             </TouchableOpacity>
           </View>
         )}
-        <TouchableOpacity onPress={logout} style={styles.button}>
+        <TouchableOpacity onPress={handleLogout} style={styles.button}>
           <Text style={styles.buttonText}>SAIR</Text>
         </TouchableOpacity>
       </ThemedView>

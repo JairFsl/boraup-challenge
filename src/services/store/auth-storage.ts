@@ -1,4 +1,6 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
+import { createJSONStorage, persist } from "zustand/middleware";
 
 export type UserType = {
   id: string;
@@ -30,39 +32,34 @@ type AuthStorageActionsType = {
   offLoading: () => void;
 }
 
-/**
- * A parte comentada permite a persistência de dados integrando com a biblioteca AsyncStorage.
- * Prefiro utilizar o AsyncStorage apenas para dados não sensíveis.
- * Como só é necessário a parte de autenticação para este desafio, então não utilizarei o AsyncStorage.
- */
 const AuthStorage = create<AuthStorageDataType & AuthStorageActionsType>()(
-  // persist(
-  (set) => ({
-    user: undefined,
-    hasLogin: false,
-    loading: false,
+  persist(
+    (set) => ({
+      user: undefined,
+      hasLogin: false,
+      loading: false,
 
-    login: (data?: UserType): void => {
-      if (data) set({ user: data })
-      set({ hasLogin: true })
-    },
+      login: (data?: UserType): void => {
+        if (data) set({ user: data })
+        set({ hasLogin: true })
+      },
 
-    logout: (): void => {
-      set({ user: undefined, hasLogin: false });
-    },
+      logout: (): void => {
+        set({ user: undefined, hasLogin: false });
+      },
 
-    onLoading: (): void => {
-      set({ loading: true })
-    },
-    offLoading: (): void => {
-      set({ loading: false })
+      onLoading: (): void => {
+        set({ loading: true })
+      },
+      offLoading: (): void => {
+        set({ loading: false })
+      }
+    }),
+    {
+      name: "auth-store",
+      storage: createJSONStorage(() => AsyncStorage)
     }
-  }),
-  // {
-  //   name: "auth-store",
-  //   storage: createJSONStorage(() => AsyncStorage)
-  // }
-  // )
+  )
 )
 
 export default AuthStorage
