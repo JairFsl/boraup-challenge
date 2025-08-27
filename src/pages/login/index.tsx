@@ -19,6 +19,7 @@ import { useStyles } from "./styles";
 import LoadingGif from "@/assets/images/app_load.gif";
 import BoraUpLogo from "@/assets/images/splash-icon.png";
 import { AxiosError } from "axios";
+import { router } from "expo-router";
 
 interface FormFields {
   email: string;
@@ -66,6 +67,7 @@ export default function LoginPage() {
       await LoginRequest(form)
       login()
 
+      router.replace("/(pages)/home")
     } catch (error) {
       console.log("[ERROR-handleSubmit-Login]: ", error)
       if (error instanceof AxiosError) {

@@ -1,10 +1,8 @@
-import { useThemeColor } from "@/hooks/useThemeColor";
 import { fs, h, hp, w } from "@/services/utils/responsive";
 import { StyleSheet, useColorScheme } from "react-native";
 
 export const useStyles = () => {
   const theme = useColorScheme() ?? "light"
-  const themedValue = useThemeColor
 
   const styles = StyleSheet.create({
     Container: {
@@ -19,6 +17,14 @@ export const useStyles = () => {
     Title: {
       fontSize: fs(22),
       fontWeight: "bold"
+    },
+
+    infoView: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+
+      gap: w(5)
     },
 
     JsonContainer: {

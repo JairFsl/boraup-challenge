@@ -23,6 +23,7 @@ const refreshAPI = axios.create({
 })
 
 const refreshLogin = async () => {
+  console.log("[RefreshLogin]: Renovando o token de acesso")
   try {
     const currentRefreshToken = await secureStorage.get(SECURE_STORE_KEYS.REFRESH_TOKEN)
 
@@ -43,6 +44,7 @@ const refreshLogin = async () => {
       secureStorage.set(SECURE_STORE_KEYS.REFRESH_TOKEN, responseRefresh.data.refreshToken)
     ])
 
+    console.log("[RefreshLogin]: Token Renovado")
     return responseRefresh.data.accessToken
   } catch (error) {
     console.log("[RefreshLogin]: ", error)
@@ -55,6 +57,26 @@ const refreshLogin = async () => {
   }
 }
 
+API.interceptors.request.use(
+  async (request) => {
+    if (
+      request.url?.includes(AppRoutes.LOGIN) ||
+      request.url?.includes(AppRoutes.REFRESH_TOKEN)
+    ) {
+      return request;
+    }
+    const token = await secureStorage.get(SECURE_STORE_KEYS.TOKEN)
+    if (token) {
+      request.headers.set(
+        "Authorization",
+        !token.includes("Bearer") ? `Bearer ${token}` : token
+      );
+    }
+    return request;
+  },
+  (error) => Promise.reject(error)
+)
+
 API.interceptors.response.use(
   (response) => {
     return response;
@@ -63,15 +85,11 @@ API.interceptors.response.use(
     console.log("[ERROR-AxiosInterceptor-Response]: ", error);
     const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
 
-    if (error.response?.status === 403 && originalRequest && !originalRequest._retry) {
+    if ((error.response?.status === 403 || error.response?.status === 401) && originalRequest && !originalRequest._retry) {
       originalRequest._retry = true;
 
       try {
-        const newToken = await refreshLogin()
-
-        if (originalRequest.headers) {
-          originalRequest.headers["Authorization"] = `${!newToken.includes("Bearer") ? `Bearer ${newToken}` : newToken}`;
-        }
+        await refreshLogin()
 
         return API(originalRequest);
       } catch (error) {
@@ -80,7 +98,7 @@ API.interceptors.response.use(
       }
     }
 
-    if (error.response?.status === 403) {
+    if (error.response?.status === 403 || error.response?.status === 401) {
       router.replace("/(auth)/login")
       return Promise.reject(error);
     }

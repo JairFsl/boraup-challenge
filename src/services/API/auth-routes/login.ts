@@ -19,11 +19,9 @@ export default async function LoginRequest({ email, password }: LoginRequestProp
     const response = await API.post(AppRoutes.LOGIN, { email, password })
     console.log("[LOG-LoginRequest]: ", response)
 
-    if (response.status === 200) {
-      const secureStorage = new SecureStorage()
-      secureStorage.set(SECURE_STORE_KEYS.TOKEN, response.data.accessToken)
-      secureStorage.set(SECURE_STORE_KEYS.REFRESH_TOKEN, response.data.refreshToken)
-    }
+    const secureStorage = new SecureStorage()
+    secureStorage.set(SECURE_STORE_KEYS.TOKEN, response.data.accessToken)
+    secureStorage.set(SECURE_STORE_KEYS.REFRESH_TOKEN, response.data.refreshToken)
 
     return response.data
   } catch (error) {

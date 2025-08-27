@@ -8,15 +8,17 @@ import BasicInput from "@/components/basic-input";
 import LoadingView from "@/components/loading-view";
 import ThemedText from "@/components/themed-text";
 import ThemedView from "@/components/themed-view";
+import { Colors } from "@/constants/Colors";
 import HomeRequest from "@/services/API/home-routes/user-me";
 import AuthStorage from "@/services/store/auth-storage";
 import FormatPhone from "@/services/utils/format-phone";
 import { w } from "@/services/utils/responsive";
+import { Feather } from "@expo/vector-icons";
 import { useStyles } from "./styles";
 
 
 export default function HomePage() {
-  const { styles } = useStyles()
+  const { styles, theme } = useStyles()
   const { logout } = AuthStorage()
 
   const { data, refetch, isLoading } = useQuery({
@@ -34,7 +36,13 @@ export default function HomePage() {
     <SafeAreaView style={{ flex: 1 }}>
       <ThemedView style={styles.Container}>
         {data && (
-          <ThemedText type="title">Seu Usuário:</ThemedText>
+          <>
+            <ThemedText type="title">Seu Usuário:</ThemedText>
+            <View style={styles.infoView}>
+              <Feather name="info" size={24} color={Colors[theme].icon} />
+              <ThemedText type="default">Não é possível editar os campos abaixo</ThemedText>
+            </View>
+          </>
         )}
 
         {data ? (
@@ -58,7 +66,7 @@ export default function HomePage() {
               />
               <BasicInput
                 label="Data de Nascimento:"
-                value={format(data.birthday || "", "dd/MM/yyyy")}
+                value={data.birthday ? format(data.birthday, "dd/MM/yyyy") : ""}
                 editable={false}
                 containerStyle={{ flex: 1 }}
               />

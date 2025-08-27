@@ -7,7 +7,7 @@ export type UserType = {
   name: string;
   email: string;
   phone: string | null;
-  birthday: string | null;
+  birthday: Date | null;
   documents: string[];
   verified: boolean;
   pixKey: string | null;
