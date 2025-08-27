@@ -1,50 +1,49 @@
-# Welcome to your Expo app 👋
+# Bem-vindo ao BoraUp Challenge 👋
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Este é um projeto **React Native** desenvolvido com **Expo** e **Expo Router**, criado usando `create-expo-app`.
 
-## Get started
 
-1. Install dependencies
+## 🚀 Como começar
 
-   ```bash
-   npm install
-   ```
+Siga os passos abaixo após clonar o projeto em seu ambiente de desenvolvimento.
 
-2. Start the app
+### Pré-requisitos
 
-   ```bash
-   npx expo start
-   ```
+Certifique-se de que você tem o **Node.js** e o **Yarn** instalados em sua máquina.
 
-In the output, you'll find options to open the app in a
+### 1. Instalar dependências
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+Acesse o diretório do projeto e instale as dependências:
 
 ```bash
-npm run reset-project
+yarn install
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### 2. Executar a aplicação
+#### **Expo Go** (RECOMENDADO)
+ - Prepare as variáveis de ambiente
+```bash
+cp .env.example .env
+```
 
-## Learn more
+ - Execute a aplicação e abra no dispositivo que preferir
 
-To learn more about developing your project with Expo, look at the following resources:
+```bash
+yarn dev | npx expo start --go
+```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+#### **Build APK** (Esta opção pode conter limitações pois contém um binário incompleto)
+![App APK](https://github.com/JairFsl/boraup-challenge/blob/main/src/assets/images/APK/qr-code-apk.jpeg)
 
-## Join the community
+ - [Link da build](https://expo.dev/accounts/jairfsl/projects/BoraUp/builds/1a0493a6-21b4-49a5-8fd2-83d8682cdaae)
 
-Join our community of developers creating universal apps.
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Organização das pastas
+
+A estrutura de navegação do app utiliza o **File-Based Routing**, onde cada arquivo dentro da pasta `app/` define uma rota na sua aplicação, simplificando o gerenciamento de telas e a criação de Deep Links.
+
+Porém para facilitar envios de updates de baixa prioridade eu gosto separar as páginas que serão acessadas pelos usuários na pasta `pages/`.
+Deixando apenas a responsabilidade de organização das rotas para a pasta `app/`
+
+Para permitir os testes via **Expo Go** alterei o hook `useKeyboardControll` para um conjunto de 'listeners'. Isso prejudica a performance do app porém quebra o galho.
+
